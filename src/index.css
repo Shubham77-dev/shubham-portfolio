@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-dark-bg text-gray-100 font-body antialiased overflow-x-hidden;
+  }
+
+  ::selection {
+    @apply bg-accent/30 text-accent-hi;
+  }
+
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-dark-bg;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-dark-surface rounded-full;
+  }
+}
+
+@layer components {
+  .section-tag {
+    @apply inline-flex items-center gap-2 text-[11px] font-medium tracking-[0.1em] uppercase text-accent-hi mb-4;
+  }
+  .section-tag::before {
+    content: '';
+    @apply block w-5 h-px bg-accent;
+  }
+
+  .section-title {
+    @apply font-display text-3xl md:text-4xl lg:text-[42px] font-bold leading-[1.12] tracking-[-0.03em] text-white mb-3;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-accent text-white text-[14px] font-medium rounded-[10px] 
+           transition-all duration-200 hover:bg-accent-hi hover:-translate-y-0.5 hover:shadow-[0_6px_24px_rgba(91,139,255,0.35)]
+           active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-transparent text-gray-100 text-[14px] font-normal 
+           rounded-[10px] border border-white/[0.13] transition-all duration-200 
+           hover:border-accent hover:text-accent-hi;
+  }
+
+  .card {
+    @apply bg-dark-bg3 border border-white/[0.07] rounded-2xl transition-all duration-200
+           hover:border-white/[0.13];
+  }
+
+  .pill {
+    @apply text-[11px] font-medium px-3 py-1 rounded-full border border-white/[0.07] 
+           text-gray-400 transition-all duration-150 cursor-default
+           hover:border-accent hover:text-accent-hi;
+  }
+
+  .pill-expert {
+    @apply pill border-accent/30 text-accent-hi bg-accent/10;
+  }
+
+  .glow-dot {
+    @apply w-1.5 h-1.5 rounded-full bg-cyan-DEFAULT animate-pulse-slow;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-hi to-cyan-DEFAULT;
+  }
+}
