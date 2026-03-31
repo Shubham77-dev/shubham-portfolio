@@ -10,7 +10,15 @@ const accentMap = {
 }
 
 export default function ProjectCard({ project, index }) {
-  const accent = accentMap[project.accentColor] || accentMap.blue
+  const safeProject = project || {}
+  const accent = accentMap[safeProject.accentColor] || accentMap.blue
+  const tech = Array.isArray(safeProject.tech) ? safeProject.tech : []
+  const impact = Array.isArray(safeProject.impact) ? safeProject.impact : []
+  const title = safeProject.title || ''
+  const badge = safeProject.badge || ''
+  const tagline = safeProject.tagline || ''
+  const problem = safeProject.problem || ''
+  const solution = safeProject.solution || ''
 
   return (
     <motion.div
@@ -26,12 +34,12 @@ export default function ProjectCard({ project, index }) {
           {/* Meta row */}
           <div className="flex items-center gap-3 mb-4">
             <span className="font-display text-[12px] font-bold text-gray-600 tracking-widest">
-              {project.num}
+              {safeProject.num}
             </span>
             <span className={`text-[10px] font-medium px-3 py-[3px] rounded-full border ${accent.badge}`}>
-              {project.badge}
+              {badge}
             </span>
-            {project.status === 'in-progress' && (
+            {safeProject.status === 'in-progress' && (
               <span className="text-[10px] font-medium text-[#30E5D0] flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#30E5D0] animate-pulse" />
                 In progress
@@ -41,12 +49,12 @@ export default function ProjectCard({ project, index }) {
 
           {/* Title */}
           <h3 className="font-display text-[20px] md:text-[24px] font-bold text-white tracking-tight leading-tight mb-2">
-            {project.title}
+            {title}
           </h3>
 
           {/* Tagline */}
           <p className="text-[14px] text-[#30E5D0] font-medium italic mb-5">
-            {project.tagline}
+            {tagline}
           </p>
 
           {/* Problem / Solution */}
@@ -55,35 +63,35 @@ export default function ProjectCard({ project, index }) {
               <div className="text-[10px] font-medium tracking-[0.08em] uppercase text-gray-600 mb-1">
                 The Problem
               </div>
-              <p className="text-[14px] text-gray-400 leading-relaxed">{project.problem}</p>
+              <p className="text-[14px] text-gray-400 leading-relaxed">{problem}</p>
             </div>
             <div>
               <div className="text-[10px] font-medium tracking-[0.08em] uppercase text-gray-600 mb-1">
                 My Solution
               </div>
-              <p className="text-[14px] text-gray-400 leading-relaxed">{project.solution}</p>
+              <p className="text-[14px] text-gray-400 leading-relaxed">{solution}</p>
             </div>
           </div>
 
           {/* Impact bar */}
           <div className={`flex gap-6 flex-wrap rounded-xl p-4 mb-5 border ${accent.impact}`}>
-            {project.impact.map((s) => (
+            {impact.map((s) => (
               <ImpactStat key={s.label} value={s.value} label={s.label} />
             ))}
           </div>
 
           {/* Tech tags */}
           <div className="flex flex-wrap gap-2 mb-6">
-            {project.tech.map((t) => (
+            {tech.map((t) => (
               <TechTag key={t}>{t}</TechTag>
             ))}
           </div>
 
           {/* Links */}
           <div className="flex gap-3">
-            {project.liveUrl && (
+            {safeProject.liveUrl && (
               <a
-                href={project.liveUrl}
+                href={safeProject.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-[12px] font-medium px-4 py-2 bg-accent text-white rounded-md hover:bg-accent-hi transition-all"
@@ -92,14 +100,14 @@ export default function ProjectCard({ project, index }) {
                 Live Site
               </a>
             )}
-            {!project.liveUrl && project.status === 'in-progress' && (
+            {!safeProject.liveUrl && safeProject.status === 'in-progress' && (
               <span className="inline-flex items-center gap-2 text-[12px] font-medium px-4 py-2 bg-accent/20 text-accent-hi rounded-md border border-accent/20 cursor-default">
                 Coming Soon
               </span>
             )}
-            {project.githubUrl && (
+            {safeProject.githubUrl && (
               <a
-                href={project.githubUrl}
+                href={safeProject.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-[12px] font-medium px-4 py-2 border border-white/[0.13] text-gray-400 rounded-md hover:border-accent hover:text-accent-hi transition-all"
@@ -108,7 +116,7 @@ export default function ProjectCard({ project, index }) {
                 GitHub
               </a>
             )}
-            {!project.liveUrl && !project.githubUrl && project.status === 'shipped' && (
+            {!safeProject.liveUrl && !safeProject.githubUrl && safeProject.status === 'shipped' && (
               <span className="inline-flex items-center gap-2 text-[12px] font-medium px-4 py-2 border border-white/[0.07] text-gray-500 rounded-md cursor-default">
                 Private / Client Work
               </span>
@@ -118,11 +126,11 @@ export default function ProjectCard({ project, index }) {
 
         {/* Decorative visual panel */}
         <div className={`hidden lg:flex w-[280px] flex-shrink-0 items-center justify-center p-8 
-          ${project.accentColor === 'blue'   ? 'bg-gradient-to-br from-[#080B12] to-[#0e0e24]' : ''}
-          ${project.accentColor === 'amber'  ? 'bg-gradient-to-br from-[#080B12] to-[#141008]' : ''}
-          ${project.accentColor === 'coral'  ? 'bg-gradient-to-br from-[#080B12] to-[#11080f]' : ''}
-          ${project.accentColor === 'purple' ? 'bg-gradient-to-br from-[#080B12] to-[#0f0b1a]' : ''}
-          ${project.accentColor === 'cyan'   ? 'bg-gradient-to-br from-[#080B12] to-[#071814]' : ''}
+          ${safeProject.accentColor === 'blue'   ? 'bg-gradient-to-br from-[#080B12] to-[#0e0e24]' : ''}
+          ${safeProject.accentColor === 'amber'  ? 'bg-gradient-to-br from-[#080B12] to-[#141008]' : ''}
+          ${safeProject.accentColor === 'coral'  ? 'bg-gradient-to-br from-[#080B12] to-[#11080f]' : ''}
+          ${safeProject.accentColor === 'purple' ? 'bg-gradient-to-br from-[#080B12] to-[#0f0b1a]' : ''}
+          ${safeProject.accentColor === 'cyan'   ? 'bg-gradient-to-br from-[#080B12] to-[#071814]' : ''}
         `}>
           <MockBrowser project={project} accent={accent} />
         </div>
@@ -133,6 +141,7 @@ export default function ProjectCard({ project, index }) {
 
 // ─── Browser mockup ───────────────────────────────────────────────
 function MockBrowser({ project, accent }) {
+  const mockTitle = (project?.title || 'app').split(' ')[0].toLowerCase()
   return (
     <div className="w-full max-w-[240px] bg-[#0D1017] rounded-lg border border-white/[0.07] overflow-hidden shadow-2xl">
       {/* Bar */}
@@ -141,7 +150,7 @@ function MockBrowser({ project, accent }) {
         <span className="w-2 h-2 rounded-full bg-amber-500/70" />
         <span className="w-2 h-2 rounded-full bg-[#30E5D0]/70" />
         <div className="flex-1 ml-2 bg-[#121620] rounded h-4 flex items-center px-2">
-          <span className="text-[9px] text-gray-600 font-mono truncate">{project.title.split(' ')[0].toLowerCase()}.app</span>
+          <span className="text-[9px] text-gray-600 font-mono truncate">{mockTitle}.app</span>
         </div>
       </div>
       {/* Body */}

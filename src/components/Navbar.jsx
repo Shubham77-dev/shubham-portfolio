@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavbar, useScrollSpy } from '../hooks'
-import { navLinks } from '../data'
+import { navLinks } from '../constants/navLinks'
 
 export default function Navbar() {
   const scrolled = useNavbar(20)

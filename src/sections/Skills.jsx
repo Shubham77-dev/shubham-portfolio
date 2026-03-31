@@ -1,14 +1,15 @@
-import { skillGroups } from '../data'
 import { SectionTag, SectionTitle, Pill, AnimatedSection } from '../components/ui'
 
-const groupAccent = {
-  blue:  'bg-accent/10',
-  cyan:  'bg-[#30E5D0]/[0.09]',
-  amber: 'bg-amber-500/10',
-  coral: 'bg-rose-500/10',
-}
+// Skills come from the API as a flat array: [{ name, expert, _id }]
+// We display them in two visual groups: Expert (highlighted) and Proficient.
+export default function Skills({ skills = [] }) {
+  const safeSkills = Array.isArray(skills) ? skills : []
 
-export default function Skills() {
+  const expertSkills    = safeSkills.filter((s) => s.expert)
+  const proficientSkills = safeSkills.filter((s) => !s.expert)
+
+  const isEmpty = safeSkills.length === 0
+
   return (
     <section id="skills" className="py-24 px-6 md:px-10">
       <div className="max-w-5xl mx-auto">
@@ -20,38 +21,67 @@ export default function Skills() {
             every codebase.
           </SectionTitle>
           <p className="text-[16px] text-gray-400 max-w-[480px] mb-14">
-            Grouped by category.{' '}
             <span className="text-accent-hi">Highlighted</span> = where I move
-            without thinking.
+            without thinking. Everything else is production-proficient.
           </p>
         </AnimatedSection>
 
-        <div className="grid sm:grid-cols-2 gap-5">
-          {skillGroups.map((group, i) => (
-            <AnimatedSection key={group.id} delay={i * 0.08}>
-              <div className="bg-[#121620] border border-white/[0.07] rounded-2xl p-7 h-full transition-all hover:border-white/[0.13] hover:-translate-y-0.5 duration-200">
-                {/* Header */}
-                <div className="flex items-center gap-3 mb-5">
-                  <div className={`w-9 h-9 rounded-md flex items-center justify-center text-[18px] ${groupAccent[group.color]}`}>
-                    {group.icon}
+        {isEmpty ? (
+          /* ── Empty state ── */
+          <AnimatedSection>
+            <div className="bg-[#121620] border border-dashed border-white/[0.12] rounded-2xl p-10 flex flex-col items-center gap-3 text-center">
+              <span className="text-3xl">🛠️</span>
+              <p className="text-[15px] text-gray-400 font-medium">Skills coming soon</p>
+              <p className="text-[13px] text-gray-600">
+                Add skills in the Admin panel → Skills tab.
+              </p>
+            </div>
+          </AnimatedSection>
+        ) : (
+          <div className="flex flex-col gap-5">
+            {/* Expert group */}
+            {expertSkills.length > 0 && (
+              <AnimatedSection>
+                <div className="bg-[#121620] border border-white/[0.07] rounded-2xl p-7 transition-all hover:border-white/[0.13] duration-200">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="w-2 h-2 rounded-full bg-accent-hi" />
+                    <span className="text-[11px] font-medium tracking-[0.08em] uppercase text-accent-hi">
+                      Expert
+                    </span>
                   </div>
-                  <span className="font-display text-[14px] font-semibold text-white">
-                    {group.title}
-                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {expertSkills.map((skill) => (
+                      <Pill key={skill._id || skill.name} expert>
+                        {skill.name}
+                      </Pill>
+                    ))}
+                  </div>
                 </div>
+              </AnimatedSection>
+            )}
 
-                {/* Pills */}
-                <div className="flex flex-wrap gap-2">
-                  {group.skills.map((skill) => (
-                    <Pill key={skill.name} expert={skill.expert}>
-                      {skill.name}
-                    </Pill>
-                  ))}
+            {/* Proficient group */}
+            {proficientSkills.length > 0 && (
+              <AnimatedSection delay={0.06}>
+                <div className="bg-[#121620] border border-white/[0.07] rounded-2xl p-7 transition-all hover:border-white/[0.13] duration-200">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="w-2 h-2 rounded-full bg-gray-500" />
+                    <span className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500">
+                      Proficient
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {proficientSkills.map((skill) => (
+                      <Pill key={skill._id || skill.name}>
+                        {skill.name}
+                      </Pill>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </AnimatedSection>
-          ))}
-        </div>
+              </AnimatedSection>
+            )}
+          </div>
+        )}
       </div>
     </section>
   )

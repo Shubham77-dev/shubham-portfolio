@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { stats } from '../data'
+import { stats } from '../constants/stats'
 import { ArrowRightIcon, MailIcon } from '../components/ui'
 
 const container = {
@@ -11,7 +11,14 @@ const item = {
   show:   { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
 }
 
-export default function Hero() {
+export default function Hero({ displayName } = {}) {
+  const parts = String(displayName || '')
+    .split(/[\s\-_]+/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+  const first = parts[0] ? parts[0].slice(0, 1).toUpperCase() + parts[0].slice(1) : 'Portfolio'
+  const second = parts.length > 1 ? parts[1].slice(0, 1).toUpperCase() + parts[1].slice(1) : 'Portfolio'
+
   const scrollTo = (id) => {
     const el = document.getElementById(id)
     if (el) window.scrollTo({ top: el.offsetTop - 64, behavior: 'smooth' })
@@ -48,9 +55,9 @@ export default function Hero() {
             className="font-display font-extrabold leading-[1.0] tracking-[-0.045em] text-white mb-2"
             style={{ fontSize: 'clamp(46px, 8vw, 92px)' }}
           >
-            Shubham
+            {first}
             <br />
-            Patidar
+            {second}
             <br />
             <span className="bg-gradient-to-r from-accent-hi to-[#30E5D0] bg-clip-text text-transparent">
               builds fast.

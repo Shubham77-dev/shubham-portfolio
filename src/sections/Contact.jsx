@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { contactLinks } from '../data'
+import { contactLinks } from '../constants/contactLinks'
 import { SectionTag, AnimatedSection, MailIcon, PhoneIcon, LinkedinIcon, GithubIcon, ArrowRightIcon } from '../components/ui'
 
 const iconMap = {
